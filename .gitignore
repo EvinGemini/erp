@@ -22,6 +22,7 @@
 *.rar
 .settings
 .project
+erp_parent.iml
 .iml
 .idea
 
