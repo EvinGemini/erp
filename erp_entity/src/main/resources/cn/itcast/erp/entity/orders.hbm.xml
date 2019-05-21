@@ -19,7 +19,11 @@
         <property name="supplieruuid" /> 
         <property name="totalmoney" /> 
         <property name="state" /> 
-        <property name="waybillsn" /> 
+        <property name="waybillsn" />
+        <bag name="orderdetails" cascade="save-update" inverse="true">
+            <key column="ordersuuid"></key>
+            <one-to-many class="cn.itcast.erp.entity.Orderdetail"/>
+        </bag>
  
     </class>
 </hibernate-mapping>

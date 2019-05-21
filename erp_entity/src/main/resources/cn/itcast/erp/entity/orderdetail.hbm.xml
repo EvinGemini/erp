@@ -16,7 +16,6 @@
         <property name="ender" /> 
         <property name="storeuuid" /> 
         <property name="state" /> 
-        <property name="ordersuuid" /> 
- 
+        <many-to-one name="orders" class="cn.itcast.erp.entity.Orders" column="ordersuuid"></many-to-one>
     </class>
 </hibernate-mapping>

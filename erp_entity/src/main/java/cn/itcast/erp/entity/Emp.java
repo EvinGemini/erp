@@ -10,7 +10,7 @@ public class Emp {
 	private Long uuid;//编号
 	private String username;//登陆名
 	//不转换json字符串
-	@JSONField(serialize=false)
+	//@JSONField(serialize=false)
 	private String pwd;//登陆密码
 	private String name;//真实姓名
 	private Long gender;//性别

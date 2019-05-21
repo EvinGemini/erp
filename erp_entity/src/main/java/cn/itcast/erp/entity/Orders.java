@@ -1,9 +1,41 @@
 package cn.itcast.erp.entity;
+
+import java.util.List;
+
 /**
  * 订单实体类
  * @author Administrator *
  */
-public class Orders {	
+public class Orders {
+	/**
+	 * 未审核
+	 */
+	public static final String STATE_CREATE = "0";
+	/**
+	 * 已审核
+	 */
+	public static final String STATE_CHECK = "1";
+	/**
+	 * 已确认
+	 */
+	public static final String STATE_START = "2";
+	/**
+	 * 已结束
+	 */
+	public static final String STATE_END = "3";
+
+
+	/**
+	 * 采购
+	 */
+	public static final String TYPE_IN = "1";
+	/**
+	 * 销售
+	 */
+	public static final String TYPE_OUT = "2";
+
+
+
 	private Long uuid;//编号
 	private java.util.Date createtime;//生成日期
 	private java.util.Date checktime;//审核日期
@@ -18,6 +50,7 @@ public class Orders {
 	private Double totalmoney;//合计金额
 	private String state;//采购: 0:未审核 1:已审核, 2:已确认, 3:已入库；销售：0:未出库 1:已出库
 	private Long waybillsn;//运单号
+	private List<Orderdetail> orderdetails;
 
 	public Long getUuid() {		
 		return uuid;
@@ -104,4 +137,11 @@ public class Orders {
 		this.waybillsn = waybillsn;
 	}
 
+	public List<Orderdetail> getOrderdetails() {
+		return orderdetails;
+	}
+
+	public void setOrderdetails(List<Orderdetail> orderdetails) {
+		this.orderdetails = orderdetails;
+	}
 }

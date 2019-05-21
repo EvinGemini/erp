@@ -19,8 +19,12 @@
 	  		    {field:'origin',title:'产地',width:100},
 	  		    {field:'producer',title:'厂家',width:100},
 	  		    {field:'unit',title:'计量单位',width:100},
-	  		    {field:'inprice',title:'进货价格',width:100},
-	  		    {field:'outprice',title:'销售价格',width:100},
+	  		    {field:'inprice',title:'进货价格',width:100,formatter:function (value) {
+						return '￥'+ value;
+					}},
+	  		    {field:'outprice',title:'销售价格',width:100,formatter:function (value) {
+						return '￥'+ value;
+					}},
 	  		    {field:'goodstype',title:'商品类型',width:100,formatter:function(value){
 	  		    	return value.name;
 	  		    }},
@@ -60,7 +64,7 @@
 
 		<table>
 						<tr>
-				<td>名称</td><td><input name="t.name"> </td>
+				<td>名称</td><td><input name="t.name" class="easyui-validatebox" data-options="required:true,missingMessage:'商品名称不能为空！' "> </td>
 			</tr>
 			<tr>
 				<td>产地</td><td><input name="t.origin"> </td>
@@ -79,7 +83,7 @@
 			</tr>
 			<tr>
 				<td>商品类型</td><td><input name="t.goodstype.uuid" class="easyui-combobox" data-options="
-			url:'goodstype_list', valueField:'uuid', textField:'name'
+			url:'goodstype_list', valueField:'uuid', textField:'name',required:true,missingMessage:'商品类型不能为空！'
 				"> </td>
 			</tr>
 

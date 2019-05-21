@@ -170,6 +170,8 @@
 	        <artifactId>shiro-aspectj</artifactId>
 	        <version>${shiro.ver}</version>
 	    </dependency>
+
+
 	</dependencies>
   
     <build>  

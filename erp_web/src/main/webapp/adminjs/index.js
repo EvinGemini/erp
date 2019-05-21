@@ -40,15 +40,8 @@ $(function(){
 	});
 	tabClose();
 	tabCloseEven();
-	//安全退出 
-	$('#loginOut').bind('click',function(){
-		$.ajax({
-			url: 'login_loginOut',
-			success: function(){
-				location.href="login.html";
-			}
-		});
-	});
+	//安全退出
+	loginOut();
 	
 })
 
@@ -64,7 +57,7 @@ function showName(){
 			//判断是否存在登陆用户
 			//访问json的key值方式有两种.
 			//对象.
-			//对象[key]
+			//对象[key]//key需要引号引起来
 			//JSON 对象 {"success":true,"message":'超级管理员'}
 			if(rtn.success){
 				$('#username').html(rtn['message']);
@@ -72,6 +65,20 @@ function showName(){
 				location.href="login.html";
 			}
 		}
+	});
+}
+
+/**
+ * 安全退出
+ */
+function loginOut() {
+	$('#loginOut').bind('click',function(){
+		$.ajax({
+			url: 'login_loginOut',
+			success: function(){
+				location.href="login.html";
+			}
+		});
 	});
 }
 
@@ -105,7 +112,7 @@ function InitLeftMenu() {
 			$('#nav').accordion('add', {
 	            title: n.menuname,
 	            content: menulist,
-					border:false,
+				border:false,
 	            iconCls: 'icon ' + n.icon
 	        });
 	
@@ -337,31 +344,31 @@ function openPwd() {
         height: 180,
         modal: true,
         closed: true,
-        buttons:[{
+		buttons:[{
 			text:'保存',
-			iconCls: 'icon-save',
+			iconCls:'icon-save',
 			handler:function(){
 				//提交保存
-				
+
 				var oldPwd = $('#txtOldPass').val();
 				var newPwd = $('#txtNewPass').val();
 				var rePwd = $('#txtRePass').val();
-				
+
 				if(oldPwd == ''){
 					$.messager.alert('提示','原密码不能为空','info');
 					return;
 				}
-				
+
 				if(newPwd == ''){
 					$.messager.alert('提示','新密码不能为空','info');
 					return;
 				}
-				
+
 				if(rePwd != newPwd){
 					$.messager.alert('提示','确认密码不一致','info');
 					return;
 				}
-				
+
 				$.ajax({
 					url: 'emp_updatePwd',
 					data: {"oldPwd": oldPwd, "newPwd":newPwd},
@@ -372,9 +379,9 @@ function openPwd() {
 							if(rtn.success){
 								$('#w').dialog('close');
 								//清空内容
-								 $('#txtOldPass').val('');
-								 $('#txtNewPass').val('');
-								 $('#txtRePass').val('');
+								$('#txtOldPass').val('');
+								$('#txtNewPass').val('');
+								$('#txtRePass').val('');
 							}
 						});
 					}
@@ -382,12 +389,13 @@ function openPwd() {
 			}
 		},{
 			text:'关闭',
-			iconCls: 'icon-cancel',
+			iconCls:'icon-cancel',
 			handler:function(){
-				
+				$('#w').dialog('close');
 			}
 		}]
-    });
+
+	});
 }
 //关闭登录窗口
 function closePwd() {

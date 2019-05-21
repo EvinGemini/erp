@@ -15,6 +15,7 @@ $(function(){
 			handler: function(){
 				//设置保存按钮提交的方法为add
 				method = "add";
+				$('#editForm').form('clear');
 				//关闭编辑窗口
 				$('#editDlg').dialog('open');
 			}
@@ -28,8 +29,8 @@ $(function(){
 		$('#grid').datagrid('load',formData);
 	});
 
-	var h = 300;
-	var w = 200;
+	var h = 200;
+	var w = 300;
 	if(typeof(height) != "undefined"){
 		h = height;
 	}
@@ -49,7 +50,7 @@ $(function(){
 	$('#btnSave').bind('click',function(){
 		//做表单字段验证，当所有字段都有效的时候返回true。该方法使用validatebox(验证框)插件。
 		var isValid = $('#editForm').form('validate');
-		if(isValid == false){
+		if(!isValid){
 			return;
 		}
 		var formData = $('#editForm').serializeJSON();

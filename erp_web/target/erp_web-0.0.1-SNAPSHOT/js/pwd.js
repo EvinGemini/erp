@@ -41,7 +41,6 @@ $(function(){
 		height: 120,//窗口高度
 		closed: true,//窗口是是否为关闭状态, true：表示关闭
 		modal: true,//模式窗口
-		iconCls: 'icon-save',
 		buttons: [
 		   {
 			   text: '保存',

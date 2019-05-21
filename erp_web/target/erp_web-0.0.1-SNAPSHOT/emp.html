@@ -18,6 +18,7 @@
 	var columns=[[
 	  		    {field:'uuid',title:'编号',width:100},
 	  		    {field:'username',title:'登陆名',width:100},
+				{field:'pwd',title:'登陆密码',width:100},
 	  		    {field:'name',title:'真实姓名',width:100},
 	  		    {field:'gender',title:'性别',width:100,formatter:function(value, row, index){
 	  		    	value = row.gender;
@@ -109,7 +110,7 @@
 			</tr>
 			<tr>
 				<td>部门</td><td><input name="t.dep.uuid" class="easyui-combobox" data-options="
-					url:'dep_list', textField:'name', valueField:'uuid',required:true
+					url:'dep_list', textField:'name', valueField:'uuid',required:true,missingMessage:'部门不能为空！'
 				"> </td>
 			</tr>
 
