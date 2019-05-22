@@ -3,6 +3,7 @@ import cn.itcast.erp.biz.IOrdersBiz;
 import cn.itcast.erp.entity.Emp;
 import cn.itcast.erp.entity.Orderdetail;
 import cn.itcast.erp.entity.Orders;
+import cn.itcast.erp.exception.ErpException;
 import com.alibaba.fastjson.JSON;
 
 import java.util.Date;
@@ -50,7 +51,48 @@ public class OrdersAction extends BaseAction<Orders> {
 			ajaxReturn(false,"添加订单失败！");
 			e.printStackTrace();
 		}
-
 	}
+
+    /**
+     * 订单审核
+     */
+	public void doCheck() {
+		//判断是否登陆
+		Emp loginUser = getLoginUser();
+		if (null == loginUser) {
+			ajaxReturn(false,"亲，请先登录！");
+			return;
+		}
+		try {
+			ordersBiz.doCheck(getId(),loginUser.getUuid());
+			ajaxReturn(true,"审核成功");
+		}catch (ErpException e) {
+			ajaxReturn(true,e.getMessage());
+		} catch (Exception e) {
+			ajaxReturn(false,"审核失败");
+			e.printStackTrace();
+		}
+	}
+
+    /**
+     * 订单确认
+     */
+    public void doStart() {
+        //判断是否登陆
+        Emp loginUser = getLoginUser();
+        if (null == loginUser) {
+            ajaxReturn(false,"亲，请先登录！");
+            return;
+        }
+        try {
+            ordersBiz.doStart(getId(),loginUser.getUuid());
+            ajaxReturn(true,"确认成功");
+        }catch (ErpException e) {
+            ajaxReturn(true,e.getMessage());
+        } catch (Exception e) {
+            ajaxReturn(false,"确认失败");
+            e.printStackTrace();
+        }
+    }
 
 }

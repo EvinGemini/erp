@@ -13,8 +13,8 @@ public class OrdersDao extends BaseDao<Orders> implements IOrdersDao {
 
 	/**
 	 * 构建查询条件
-	 * @param dep1
-	 * @param dep2
+	 * @param orders1
+	 * @param orders2
 	 * @param param
 	 * @return
 	 */
@@ -22,12 +22,11 @@ public class OrdersDao extends BaseDao<Orders> implements IOrdersDao {
 		DetachedCriteria dc=DetachedCriteria.forClass(Orders.class);
 		if(orders1!=null){
 			if(null != orders1.getType() && orders1.getType().trim().length()>0){
-				dc.add(Restrictions.like("type", orders1.getType(), MatchMode.ANYWHERE));
+				dc.add(Restrictions.eq("type", orders1.getType()));
 			}
 			if(null != orders1.getState() && orders1.getState().trim().length()>0){
-				dc.add(Restrictions.like("state", orders1.getState(), MatchMode.ANYWHERE));
+				dc.add(Restrictions.eq("state", orders1.getState()));
 			}
-
 		}
 		return dc;
 	}

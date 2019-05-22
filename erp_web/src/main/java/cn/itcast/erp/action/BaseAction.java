@@ -130,7 +130,7 @@ public class BaseAction<T> {
 	}
 	/**
 	 * 删除
-	 * @param jsonString
+	 * @param
 	 */
 	public void delete(){
 		

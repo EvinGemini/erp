@@ -3,7 +3,10 @@ package cn.itcast.erp.entity;
  * 仓库操作记录实体类
  * @author Administrator *
  */
-public class Storeoper {	
+public class Storeoper {
+	public static final String TYPE_IN = "1";
+	public static final String TYPE_OUT = "2";
+
 	private Long uuid;//编号
 	private Long empuuid;//操作员工编号
 	private java.util.Date opertime;//操作日期

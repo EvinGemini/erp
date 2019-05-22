@@ -27,9 +27,7 @@ public class DepDao extends BaseDao<Dep> implements IDepDao {
 			if(null != dep1.getTele() && dep1.getTele().trim().length()>0){
 				dc.add(Restrictions.like("tele", dep1.getTele(), MatchMode.ANYWHERE));
 			}
-
 		}
 		return dc;
 	}
-
 }

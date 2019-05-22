@@ -13,8 +13,8 @@ public class OrderdetailDao extends BaseDao<Orderdetail> implements IOrderdetail
 
 	/**
 	 * 构建查询条件
-	 * @param dep1
-	 * @param dep2
+	 * @param orderdetail1
+	 * @param orderdetail2
 	 * @param param
 	 * @return
 	 */
@@ -25,7 +25,10 @@ public class OrderdetailDao extends BaseDao<Orderdetail> implements IOrderdetail
 				dc.add(Restrictions.like("goodsname", orderdetail1.getGoodsname(), MatchMode.ANYWHERE));
 			}
 			if(null != orderdetail1.getState() && orderdetail1.getState().trim().length()>0){
-				dc.add(Restrictions.like("state", orderdetail1.getState(), MatchMode.ANYWHERE));
+				dc.add(Restrictions.eq("state", orderdetail1.getState()));
+			}
+			if (orderdetail1.getOrders() != null && orderdetail1.getOrders().getUuid() != null) {
+				dc.add(Restrictions.eq("orders.uuid",orderdetail1.getOrders().getUuid()));
 			}
 
 		}
