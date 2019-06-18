@@ -14,6 +14,9 @@ public class Storeoper {
 	private Long goodsuuid;//商品编号
 	private Long num;//数量
 	private String type;//1：入库 2：出库
+	private String empName;
+	private String storeName;
+	private String goodsName;
 
 	public Long getUuid() {		
 		return uuid;
@@ -58,4 +61,27 @@ public class Storeoper {
 		this.type = type;
 	}
 
+	public String getEmpName() {
+		return empName;
+	}
+
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+
+	public String getStoreName() {
+		return storeName;
+	}
+
+	public void setStoreName(String storeName) {
+		this.storeName = storeName;
+	}
+
+	public String getGoodsName() {
+		return goodsName;
+	}
+
+	public void setGoodsName(String goodsName) {
+		this.goodsName = goodsName;
+	}
 }

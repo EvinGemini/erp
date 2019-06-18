@@ -33,6 +33,14 @@ public class Orders {
 	 * 销售
 	 */
 	public static final String TYPE_OUT = "2";
+	/**
+	 * 未出库
+	 */
+	public static final String STATE_NOT_OUT = "0";
+	/**
+	 * 已出库
+	 */
+	public static final String STATE_OUT = "1";
 
 
 

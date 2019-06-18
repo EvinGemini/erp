@@ -1,32 +1,54 @@
 $(function () {
-    var url = 'orders_listByPage?t1.type=1';
+    var url = 'orders_listByPage';
+    var btnText = '';
+    var inoutTitle = '';
+    if (Request['oper'] == 'myorders') {
+        url = 'orders_myListByPage?t1.type=' + Request['type'];
+        if (Request['type'] * 1 == 1) {
+            url = 'orders_myListByPage?t1.type=' + Request['type'];
+            document.title = '我的订单';
+            btnText = '采购申请';
+
+            $("#addOrderSupplier").html('供应商');
+        } else if (Request['type'] * 1 == 2) {
+            url = 'orders_myListByPage?t1.type=' + Request['type'] + '&t1.state = 0';
+            document.title = '我的销售订单';
+            btnText = '销售订单录入';
+
+            $("#addOrderSupplier").html('客户');
+        }
+
+    }
+    if (Request['oper'] == 'orders' && Request['type'] * 1 == 1) {
+        url += '?t1.type=1';
+        document.title = '采购订单查询';
+    }
+    if (Request['oper'] == 'orders' && Request['type'] * 1 == 2) {
+        url += '?t1.type=2';
+        document.title = '销售订单查询';
+    }
     if (Request['oper'] == 'doCheck') {
-        url += '&t1.state=0'
+        url += '?t1.type=1&t1.state=0';
+        document.title = '采购订单审核';
     }
     if (Request['oper'] == 'doStart') {
-        url += '&t1.state=1'
+        url += '?t1.type=1&t1.state=1';
+        document.title = '采购订单确认';
     }
     if (Request['oper'] == 'doInStore') {
-        url += '&t1.state=2'
+        url += '?t1.type=1&t1.state=2';
+        inoutTitle = '入库';
+        document.title = '采购订单入库';
+    }
+    if (Request['oper'] == 'doOutStore') {
+        url += '?t1.type=2&t1.state=0';
+        inoutTitle = '出库';
+        document.title = '销售订单出库';
     }
     //初始化订单列表
     $('#grid').datagrid({
         url: url,
-        columns: [[
-            {field: 'uuid', title: '编号', width: 100},
-            {field: 'createtime', title: '生成日期', width: 100, formatter: formatDate},
-            {field: 'checktime', title: '审核日期', width: 100, formatter: formatDate},
-            {field: 'starttime', title: '确认日期', width: 100, formatter: formatDate},
-            {field: 'endtime', title: '入库或出库日期', width: 100, formatter: formatDate},
-            {field: 'createrName', title: '下单员', width: 100},
-            {field: 'checkerName', title: '审核员', width: 100},
-            {field: 'starterName', title: '采购员', width: 100},
-            {field: 'enderName', title: '库管员', width: 100},
-            {field: 'supplierName', title: '供应商或客户', width: 100},
-            {field: 'totalmoney', title: '合计金额', width: 100},
-            {field: 'state', title: '状态', width: 100, formatter: getState},
-            {field: 'waybillsn', title: '运单号', width: 100}
-        ]],
+        columns: getColumns(),
         singleSelect: true,
         fitColumns: true,
         pagination: true,     //显示分页工具栏
@@ -86,7 +108,7 @@ $(function () {
         })
     }
     //添加明细表格双击事件
-    if (Request['oper'] == 'doInStore') {
+    if (Request['oper'] == 'doInStore' || Request['oper'] == 'doOutStore') {
         $('#itemgrid').datagrid({
             onDblClickRow:function (rowIndex, rowData) {
                 //打开窗口
@@ -99,18 +121,41 @@ $(function () {
             }
         });
     }
+
+    //动态添加采购订单按钮
+    if (Request['oper'] == 'myorders') {
+        $('#grid').datagrid({
+            toolbar: [{
+                text: btnText,
+                iconCls: 'icon-add',
+                handler: function(){
+                    $('#addOrdersDlg').dialog('open');
+                }
+            }]
+        });
+    }
+
     //初始化入库弹窗
     $('#itemDlg').dialog({
-        title: '入库',
+        title: inoutTitle,
         width: 400,
         height: 200,
         closed: true,
         modal: true,
         buttons:[{
-            text:'入库',
+            text:inoutTitle,
             iconCls:'icon-save',
-            handler:doInStore
+            handler:doInOutStore
         }]
+    });
+
+    //初始化添加订单窗口
+    $('#addOrdersDlg').dialog({
+        title: '增加订单',
+        width: 700,
+        height: 400,
+        closed: true,
+        modal: true
     });
 });
 
@@ -119,29 +164,53 @@ function formatDate(value) {
 }
 
 function getState(value) {
-    switch (value * 1) {
-        case 0:
-            return '未审核';
-        case 1:
-            return '已审核';
-        case 2:
-            return '已确认';
-        case 3:
-            return '已入库';
-        default :
-            return '';
+    if (Request['type'] * 1 == 1) {
+        switch (value * 1) {
+            case 0:
+                return '未审核';
+            case 1:
+                return '已审核';
+            case 2:
+                return '已确认';
+            case 3:
+                return '已入库';
+            default :
+                return '';
+        }
+    } else if (Request['type'] * 1 == 2) {
+        switch (value * 1) {
+            case 0:
+                return '未出库';
+            case 1:
+                return '已出库';
+            default :
+                return value;
+        }
     }
+
 }
 
 function getDetailState(value) {
-    switch (value * 1) {
-        case 0:
-            return '未入库';
-        case 1:
-            return '已入库';
-        default :
-            return '';
+    if (Request['type'] * 1 == 1) {
+        switch (value * 1) {
+            case 0:
+                return '未入库';
+            case 1:
+                return '已入库';
+            default :
+                return '';
+        }
+    } else if (Request['type'] * 1 == 2) {
+        switch (value * 1) {
+            case 0:
+                return '未出库';
+            case 1:
+                return '已出库';
+            default :
+                return '';
+        }
     }
+
 }
 
 /**
@@ -195,17 +264,26 @@ function doStart() {
 /**
  * 入库方法
  */
-function doInStore() {
+function doInOutStore() {
+    var hintMesseg = '';
+    var url = '';
+    if (Request['type'] * 1 == 1) {
+        hintMesseg = '您确认要入库吗？';
+        url = 'orderdetail_doInStore';
+    } else if (Request['type'] * 1 == 2) {
+        hintMesseg = '您确认要出库吗？';
+        url = 'orderdetail_doOutStore';
+    }
     var formData = $('#itemForm').serializeJSON();
     if (formData.storeuuid == null || formData.storeuuid == "") {
         $.messager.alert('提示','请选择仓库','info');
         return;
     }
     //询问用户是否入库
-    $.messager.confirm('确认对话框', '您确认要确认吗？', function(flag){
+    $.messager.confirm('确认对话框', hintMesseg, function(flag){
         if (flag){
             $.ajax({
-                url:'orderdetail_doInStore',
+                url:url,
                 dataType:'json',
                 data:formData,
                 type:'post',
@@ -224,7 +302,7 @@ function doInStore() {
                             //判断是否所有明细都已经入库
                             var storeFlag = true;
                             $.each(itemData.rows,function (index, element) {
-                                if (element.state * 0 == 0) {
+                                if (element.state * 1 == 0) {
                                     storeFlag = false;
                                     return false;
                                 }
@@ -243,4 +321,36 @@ function doInStore() {
             });
         }
     });
+}
+
+function getColumns() {
+    if (Request['type'] * 1 == 1) {
+        return [[
+            {field: 'uuid', title: '编号', width: 100},
+            {field: 'createtime', title: '生成日期', width: 100, formatter: formatDate},
+            {field: 'checktime', title: '审核日期', width: 100, formatter: formatDate},
+            {field: 'starttime', title: '确认日期', width: 100, formatter: formatDate},
+            {field: 'endtime', title: '入库日期', width: 100, formatter: formatDate},
+            {field: 'createrName', title: '下单员', width: 100},
+            {field: 'checkerName', title: '审核员', width: 100},
+            {field: 'starterName', title: '采购员', width: 100},
+            {field: 'enderName', title: '库管员', width: 100},
+            {field: 'supplierName', title: '供应商', width: 100},
+            {field: 'totalmoney', title: '合计金额', width: 100},
+            {field: 'state', title: '状态', width: 100, formatter: getState},
+            {field: 'waybillsn', title: '运单号', width: 100}
+        ]];
+    } else if (Request['type'] * 1 == 2) {
+        return [[
+            {field: 'uuid', title: '编号', width: 100},
+            {field: 'createtime', title: '生成日期', width: 100, formatter: formatDate},
+            {field: 'endtime', title: '出库日期', width: 100, formatter: formatDate},
+            {field: 'createrName', title: '下单员', width: 100},
+            {field: 'enderName', title: '库管员', width: 100},
+            {field: 'supplierName', title: '客户', width: 100},
+            {field: 'totalmoney', title: '合计金额', width: 100},
+            {field: 'state', title: '状态', width: 100, formatter: getState},
+            {field: 'waybillsn', title: '运单号', width: 100}
+        ]];
+    }
 }

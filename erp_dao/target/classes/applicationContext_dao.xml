@@ -74,6 +74,10 @@
 	<bean id="supplierDao" class="cn.itcast.erp.dao.impl.SupplierDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
+	<!-- 销售报表 -->
+	<bean id="reportDao" class="cn.itcast.erp.dao.impl.ReportDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 
 	
 </beans>

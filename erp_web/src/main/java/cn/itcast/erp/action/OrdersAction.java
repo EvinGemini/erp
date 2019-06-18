@@ -95,4 +95,20 @@ public class OrdersAction extends BaseAction<Orders> {
         }
     }
 
+	/**
+	 * 我的订单
+	 */
+	public void myListByPage() {
+		if (getT1() == null) {
+			setT1(new Orders());
+		}
+		Emp loginUser = getLoginUser();
+		if (loginUser == null) {
+			ajaxReturn(false,"亲，请先登录！");
+			return;
+		}
+		getT1().setCreater(loginUser.getUuid());
+		super.listByPage();
+	}
+
 }

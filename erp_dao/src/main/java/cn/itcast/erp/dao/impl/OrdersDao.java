@@ -27,6 +27,9 @@ public class OrdersDao extends BaseDao<Orders> implements IOrdersDao {
 			if(null != orders1.getState() && orders1.getState().trim().length()>0){
 				dc.add(Restrictions.eq("state", orders1.getState()));
 			}
+			if (null != orders1.getCreater()) {
+				dc.add(Restrictions.eq("creater",orders1.getCreater()));
+			}
 		}
 		return dc;
 	}

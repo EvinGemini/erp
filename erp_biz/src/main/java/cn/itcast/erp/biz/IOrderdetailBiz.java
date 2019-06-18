@@ -13,5 +13,7 @@ public interface IOrderdetailBiz extends IBaseBiz<Orderdetail>{
      * @param empUuid 库管员id
      */
     void doInStore(Long uuid,Long storeUuidd,Long empUuid);
+
+    void doOutStore(Long uuid,Long storeUuidd,Long empUuid);
 }
 

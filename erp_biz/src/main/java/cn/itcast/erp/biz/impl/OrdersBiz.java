@@ -46,7 +46,7 @@ public class OrdersBiz extends BaseBiz<Orders> implements IOrdersBiz {
 		//设置下单时间
 		orders.setCreatetime(new Date());
 		//设置订单类型
-		orders.setType(Orders.TYPE_IN);
+//		orders.setType(Orders.TYPE_IN);
 		double total = 0;
 		//设置订单明细与订单的关联与合计金额
 		for (Orderdetail orderdetail : orders.getOrderdetails()) {

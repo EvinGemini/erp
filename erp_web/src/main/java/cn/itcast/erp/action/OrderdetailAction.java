@@ -23,6 +23,9 @@ public class OrderdetailAction extends BaseAction<Orderdetail> {
 		super.setBaseBiz(this.orderdetailBiz);
 	}
 
+	/**
+	 * 入库
+	 */
 	public void doInStore() {
 		//判断是否登陆
 		Emp loginUser = getLoginUser();
@@ -39,8 +42,26 @@ public class OrderdetailAction extends BaseAction<Orderdetail> {
 			ajaxReturn(false,"入库失败");
 			e.printStackTrace();
 		}
-
-
 	}
 
+	/**
+	 * 出库
+	 */
+	public void doOutStore() {
+		//判断是否登陆
+		Emp loginUser = getLoginUser();
+		if (loginUser == null) {
+			ajaxReturn(false,"请登陆后在操作");
+			return;
+		}
+		try {
+			orderdetailBiz.doOutStore(getId(),storeuuid,loginUser.getUuid());
+			ajaxReturn(true,"出库成功");
+		} catch (ErpException e){
+			ajaxReturn(false,e.getMessage());
+		}catch (Exception e) {
+			ajaxReturn(false,"出库失败");
+			e.printStackTrace();
+		}
+	}
 }

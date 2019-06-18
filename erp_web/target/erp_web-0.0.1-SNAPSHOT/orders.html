@@ -14,6 +14,7 @@
 	<script type="text/javascript" src="js/orders.js"></script>
 	<script type="text/javascript" src="ui/date.js"></script>
 	<script type="text/javascript" src="ui/request.js"></script>
+	<script type="text/javascript" src="js/order_add.js"></script>
 </head>
 <body>
 <!--	订单列表-->
@@ -79,6 +80,14 @@
 			</tr>
 		</table>
 	</form>
+</div>
+
+<div id="addOrdersDlg" style="padding: 2px">
+	<form id="orderForm">
+		<span id="addOrderSupplier"></span>：<input id="supplier" name="t.supplieruuid" />
+	</form>
+	<div style="height: 5px"></div>
+	<table id="ordersgrid"></table>
 </div>
 
 </body>

@@ -68,16 +68,24 @@
 	<!-- 仓库库存 -->
 	<bean id="storedetailBiz" class="cn.itcast.erp.biz.impl.StoredetailBiz">
 		<property name="storedetailDao" ref="storedetailDao"></property>
+		<property name="goodsDao" ref="goodsDao"></property>
+		<property name="storeDao" ref="storeDao"></property>
 	</bean>
 	<!-- 仓库操作记录 -->
 	<bean id="storeoperBiz" class="cn.itcast.erp.biz.impl.StoreoperBiz">
 		<property name="storeoperDao" ref="storeoperDao"></property>
+		<property name="storeDao" ref="storeDao"></property>
+		<property name="goodsDao" ref="goodsDao"></property>
+		<property name="empDao" ref="empDao"></property>
 	</bean>
 	<!-- 供应商 -->
 	<bean id="supplierBiz" class="cn.itcast.erp.biz.impl.SupplierBiz">
 		<property name="supplierDao" ref="supplierDao"></property>
 	</bean>
-
+	<!--销售报表-->
+	<bean id="reportBiz" class="cn.itcast.erp.biz.impl.ReportBiz">
+		<property name="reportDao" ref="reportDao"></property>
+	</bean>
 	
 </beans>
 	

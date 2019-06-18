@@ -1,6 +1,6 @@
 var exsitEditIndex = -1;
 $(function () {
-    $('#grid').datagrid({
+    $('#ordersgrid').datagrid({
         singleSelect:true,
         showFooter:true,
         columns:[[
@@ -15,7 +15,13 @@ $(function () {
                             $(goodsuuidEdit.target).val(goods.uuid);
                             //获取商品价格编辑器
                             var priceEdit = getEdit('price');
-                            $(priceEdit.target).val(goods.inprice);
+                            if (Request['type'] * 1 == 1) {
+                                //设置进货价
+                                $(priceEdit.target).val(goods.inprice);
+                            } else if (Request['type'] * 1 == 2) {
+                                //设置销售价
+                                $(priceEdit.target).val(goods.outprice);
+                            }
                             //获取数量编辑器，选中的时候让数量编辑器选中
                             var numEdit = getEdit('num');
                             $(numEdit.target).select();
@@ -37,9 +43,9 @@ $(function () {
             }}
         ]],
         onClickRow:function(rowIndex,rowData) {
-            $('#grid').datagrid('endEdit',exsitEditIndex);
+            $('#ordersgrid').datagrid('endEdit',exsitEditIndex);
             exsitEditIndex = rowIndex;
-            $('#grid').datagrid('beginEdit',exsitEditIndex);
+            $('#ordersgrid').datagrid('beginEdit',exsitEditIndex);
             bindGridEvent();
         },
         toolbar:[{
@@ -47,14 +53,14 @@ $(function () {
             iconCls: 'icon-add',
             handler: function(){
                 if (exsitEditIndex != -1) {
-                    $('#grid').datagrid('endEdit',exsitEditIndex);
+                    $('#ordersgrid').datagrid('endEdit',exsitEditIndex);
                 }
-                $('#grid').datagrid('appendRow',{
+                $('#ordersgrid').datagrid('appendRow',{
                     num: 0,
                     money: 0
                 });
-                exsitEditIndex = $('#grid').datagrid('getRows').length - 1;
-                $('#grid').datagrid('beginEdit',exsitEditIndex);
+                exsitEditIndex = $('#ordersgrid').datagrid('getRows').length - 1;
+                $('#ordersgrid').datagrid('beginEdit',exsitEditIndex);
             }
         },'-',{
             text:'提交',
@@ -62,7 +68,7 @@ $(function () {
             handler: function(){
                 //关闭编辑状态的行，保证获取完整数据
                 if (exsitEditIndex > -1) {
-                    $('#grid').datagrid('endEdit',exsitEditIndex);
+                    $('#ordersgrid').datagrid('endEdit',exsitEditIndex);
                     //获取供应商id
                     var data = $('#orderForm').serializeJSON();
                     if (data['t.supplieruuid'] == '') {
@@ -70,7 +76,7 @@ $(function () {
                         return;
                     }
                     //获取行的数据
-                    var rows = $('#grid').datagrid('getRows');
+                    var rows = $('#ordersgrid').datagrid('getRows');
                     if (rows.length <= 0) {
                         $.messager.alert('提示','请选择采购的商品','info');
                         return;
@@ -78,7 +84,7 @@ $(function () {
                     //把rows转json在设置给data
                     data.json = JSON.stringify(rows);
                     $.ajax({
-                        url:'orders_add',
+                        url:'orders_add' + '?t.type=' + Request['type'],
                         data:data,
                         dataType:'json',
                         type:'post',
@@ -87,7 +93,11 @@ $(function () {
                                 //清空供应商
                                 $('#supplier').combogrid('clear');
                                 //重新加载表格数据
-                                $('#grid').datagrid('loadData',{total:0,rows:[],footer:[{num:'合计',money:0}]});
+                                $('#ordersgrid').datagrid('loadData',{total:0,rows:[],footer:[{num:'合计',money:0}]});
+                                //关闭窗口
+                                $('#addOrdersDlg').dialog('close');
+                                //刷新表格
+                                $('#grid').datagrid('reload');
                             });
                         }
 
@@ -99,7 +109,7 @@ $(function () {
     });
 
     //初始化页脚行
-    $('#grid').datagrid('reloadFooter',[
+    $('#ordersgrid').datagrid('reloadFooter',[
         {num: '合计', money: 0}
     ]);
 
@@ -108,7 +118,7 @@ $(function () {
         panelWidth:700,
         idField:'uuid',
         textField:'name',
-        url:'supplier_list?t1.type=1',
+        url:'supplier_list?t1.type=' + Request['type'],
         columns:[[
             {field:'uuid',title:'编号',width:100},
             {field:'name',title:'名称',width:100},
@@ -122,7 +132,7 @@ $(function () {
 });
 
 function getEdit(_field) {
-    return $('#grid').datagrid('getEditor',{index:exsitEditIndex,field:_field});
+    return $('#ordersgrid').datagrid('getEditor',{index:exsitEditIndex,field:_field});
 }
 
 //计算金额
@@ -139,7 +149,7 @@ function calculate() {
     var moneyEdit = getEdit('money');
     var num = $(moneyEdit.target).val(money);
     //设置金额到rows中
-    $('#grid').datagrid('getRows')[exsitEditIndex].money = money;
+    $('#ordersgrid').datagrid('getRows')[exsitEditIndex].money = money;
     sum();
 }
 
@@ -160,26 +170,26 @@ function bindGridEvent() {
 //删除行
 function deleteRow(index) {
     //关闭编辑
-    $('#grid').datagrid('endEdit',exsitEditIndex);
+    $('#ordersgrid').datagrid('endEdit',exsitEditIndex);
     //删除行
-    $('#grid').datagrid('deleteRow',index);
+    $('#ordersgrid').datagrid('deleteRow',index);
     //获取datagrid数据
-    var data = $('#grid').datagrid('getData');
+    var data = $('#ordersgrid').datagrid('getData');
     //重新加载数据
-    $('#grid').datagrid('loadData',data);
+    $('#ordersgrid').datagrid('loadData',data);
     sum();
 }
 
 //计算总金额
 function sum() {
-    var rows = $('#grid').datagrid('getRows');
+    var rows = $('#ordersgrid').datagrid('getRows');
     var total = 0;
     $.each(rows,function (index, element) {
         total += parseFloat(element.money);
     })
     total = total.toFixed(2);
     //加载页脚行
-    $('#grid').datagrid('reloadFooter',[
+    $('#ordersgrid').datagrid('reloadFooter',[
         {num: '合计', money: total}
     ]);
 }

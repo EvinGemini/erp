@@ -37,5 +37,7 @@
 
 		<!-- 登陆/退出 -->
 		<action name="login_*" class="loginAction" method="{1}"></action>
+		<!--销售报表-->
+		<action name="report_*" class="reportAction" method="{1}"></action>
     </package>
 </struts>
