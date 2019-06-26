@@ -171,6 +171,19 @@
 	        <version>${shiro.ver}</version>
 	    </dependency>
 
+<!--		邮件-->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.4</version>
+		</dependency>
+<!--		调度框架-->
+		<dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.3</version>
+		</dependency>
+
 
 	</dependencies>
   

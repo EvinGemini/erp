@@ -78,6 +78,10 @@
 	<bean id="reportDao" class="cn.itcast.erp.dao.impl.ReportDao">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
+	<!-- 库存预警 -->
+	<bean id="storealertDao" class="cn.itcast.erp.dao.impl.StorealertDao">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 
 	
 </beans>
