@@ -5,7 +5,10 @@ import cn.itcast.erp.entity.Orderdetail;
 import cn.itcast.erp.entity.Orders;
 import cn.itcast.erp.exception.ErpException;
 import com.alibaba.fastjson.JSON;
+import org.apache.struts2.ServletActionContext;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -109,6 +112,20 @@ public class OrdersAction extends BaseAction<Orders> {
 		}
 		getT1().setCreater(loginUser.getUuid());
 		super.listByPage();
+	}
+
+	/**
+	 * 根据id导出订单详情
+	 */
+	public void exportById() {
+		HttpServletResponse response = ServletActionContext.getResponse();
+		String fileName = getId() + "_.xls";
+		try {
+			response.setHeader("Content-Disposition","attachment;filename=" + new String(fileName.getBytes(),"ISO-8859-1"));
+			ordersBiz.exportById(response.getOutputStream(),getId());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

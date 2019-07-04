@@ -19,6 +19,22 @@ $(function(){
 				//关闭编辑窗口
 				$('#editDlg').dialog('open');
 			}
+		},'-',{
+			text:'导出',
+			iconCls: 'icon-excel',
+			handler: function(){
+				var searchData = $('#searchForm').serializeJSON();
+				$.download(name+'_export'+listParam,searchData);
+			}
+		},'-',{
+			text:'导入',
+			iconCls: 'icon-save',
+			handler: function(){
+				var importDlg = document.getElementById("importDlg");
+				if (importDlg) {
+					$("#importDlg").dialog('open');
+				}
+			}
 		}]
 	});
 
@@ -70,6 +86,40 @@ $(function(){
 		});
 	});
 
+	var importDlg = document.getElementById("importDlg");
+	//初始化导入弹窗
+	if (importDlg) {
+		$("#importDlg").dialog({
+			title: '导入数据',
+			width: 330,
+			height: 106,
+			closed: true,
+			buttons:[{
+				text:'导入',
+				handler:function(){
+					$.ajax({
+						url:name+'_doImport',
+						type:'post',
+						data:new FormData($('#importForm')[0]),
+						dataType:'json',
+						processData:false,
+						contentType:false,
+						success:function (result) {
+							$.messager.alert('提示',result.message,'info',function () {
+								if (result.success) {
+									$('#importDlg').dialog('close');
+									$('#grid').datagrid('reload');
+								}
+							});
+
+
+						}
+					});
+				}
+			}]
+
+		});
+	}
 });
 
 

@@ -9,7 +9,13 @@ import cn.itcast.erp.entity.Orders;
 import cn.itcast.erp.entity.Supplier;
 import cn.itcast.erp.exception.ErpException;
 import com.alibaba.fastjson.JSON;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -120,6 +126,152 @@ public class OrdersBiz extends BaseBiz<Orders> implements IOrdersBiz {
 		//设置采购员
 		orders.setStarter(empUuid);
 		ordersDao.update(orders);
+	}
+
+	@Override
+	public void exportById(OutputStream outputStream, Long uuid) throws Exception {
+		Orders orders = ordersDao.get(uuid);
+		String sheetTitle = "";
+		if (Orders.TYPE_IN.equals(orders.getType())) {
+			sheetTitle = "采购";
+		}else if (Orders.TYPE_OUT.equals(orders.getType())) {
+			sheetTitle = "销售";
+		}
+		List<Orderdetail> orderdetails = orders.getOrderdetails();
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		HSSFSheet sheet = workbook.createSheet(sheetTitle);
+		//创建单元格的样式
+		HSSFCellStyle cellStyle = workbook.createCellStyle();
+		cellStyle.setBorderLeft(BorderStyle.THIN);  //左边框
+		cellStyle.setBorderTop(BorderStyle.THIN);  //上边框
+		cellStyle.setBorderRight(BorderStyle.THIN);  //右边框
+		cellStyle.setBorderBottom(BorderStyle.THIN);  //下边框
+		//设置对齐方式
+		cellStyle.setAlignment(HorizontalAlignment.CENTER);
+		cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		//设置内容的字体
+		HSSFFont content_font = workbook.createFont();
+		content_font.setFontName("宋体");
+		content_font.setFontHeightInPoints((short) 11);
+		cellStyle.setFont(content_font);
+		//商品详情数量
+		int rowCount = orderdetails.size() + 9;
+		//创建行
+		for (int i = 2; i <= rowCount; i++) {
+			HSSFRow row = sheet.createRow(i);
+			row.setHeight((short) 500);
+			for (int j = 0; j < 4; j++) {
+				HSSFCell cell = row.createCell(j);
+				cell.setCellStyle(cellStyle);
+			}
+		}
+		//合并单元格
+		sheet.addMergedRegion(new CellRangeAddress(0,0,0,3));
+		sheet.addMergedRegion(new CellRangeAddress(2,2,1,3));
+		sheet.addMergedRegion(new CellRangeAddress(7,7,0,3));
+		//设置单元格值
+		HSSFCell firstCell = sheet.createRow(0).createCell(0);
+		if (Orders.TYPE_IN.equals(orders.getType())) {
+			sheetTitle = "采购单";
+		}else if (Orders.TYPE_OUT.equals(orders.getType())) {
+			sheetTitle = "销售单";
+		}
+		firstCell.setCellValue(sheetTitle);
+		if (Orders.TYPE_IN.equals(orders.getType())) {
+			sheetTitle = "供应商";
+		}else if (Orders.TYPE_OUT.equals(orders.getType())) {
+			sheetTitle = "客户";
+		}
+		sheet.getRow(2).getCell(0).setCellValue(sheetTitle);
+		sheet.getRow(3).getCell(0).setCellValue("下单日期");
+		sheet.getRow(3).getCell(2).setCellValue("经办人");
+		sheet.getRow(4).getCell(0).setCellValue("审核日期");
+		sheet.getRow(4).getCell(2).setCellValue("经办人");
+		sheet.getRow(5).getCell(0).setCellValue("采购日期");
+		sheet.getRow(5).getCell(2).setCellValue("经办人");
+		if (Orders.TYPE_IN.equals(orders.getType())) {
+			sheetTitle = "入库日期";
+		}else if (Orders.TYPE_OUT.equals(orders.getType())) {
+			sheetTitle = "出库日期";
+		}
+		sheet.getRow(6).getCell(0).setCellValue(sheetTitle);
+		sheet.getRow(6).getCell(2).setCellValue("经办人");
+		sheet.getRow(7).getCell(0).setCellValue("订单明细");
+		sheet.getRow(8).getCell(0).setCellValue("商品名称");
+		sheet.getRow(8).getCell(1).setCellValue("数量");
+		sheet.getRow(8).getCell(2).setCellValue("价格");
+		sheet.getRow(8).getCell(3).setCellValue("金额");
+		//设置行高和列宽
+		sheet.getRow(0).setHeight((short) 1000);
+		//设置列宽
+		for (int i = 0; i < 4; i++) {
+			sheet.setColumnWidth(i,5000);
+		}
+		//设置表头对齐方式
+		HSSFCellStyle firstCellStyle = workbook.createCellStyle();
+		firstCellStyle.setAlignment(HorizontalAlignment.CENTER);
+		firstCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		HSSFFont firstFont = workbook.createFont();
+		firstFont.setFontName("黑体");
+		firstFont.setBold(true);
+		firstFont.setFontHeightInPoints((short) 18);
+		firstCellStyle.setFont(firstFont);
+		firstCell.setCellStyle(firstCellStyle);
+		//设置日期格式
+		HSSFCellStyle date_style = workbook.createCellStyle();
+		date_style.cloneStyleFrom(cellStyle);
+		HSSFDataFormat dataFormat = workbook.createDataFormat();
+		date_style.setDataFormat(dataFormat.getFormat("yyyy-MM-dd HH:mm"));
+		for (int i = 3; i < 7; i++) {
+			sheet.getRow(i).getCell(1).setCellStyle(date_style);
+		}
+
+
+		Map<Long,String> empMap = new HashMap<>();
+		Map<Long,String> supplierMap = new HashMap<>();
+		//设置供应商名称
+		sheet.getRow(2).getCell(1).setCellValue(getSupplierName(orders.getSupplieruuid(),supplierMap));
+		//设置日期
+		if (null != orders.getCreatetime()) {
+			sheet.getRow(3).getCell(1).setCellValue(orders.getCreatetime());
+		}
+		if (null != orders.getChecktime()) {
+			sheet.getRow(4).getCell(1).setCellValue(orders.getChecktime());
+		}
+		if (null != orders.getStarttime()) {
+			sheet.getRow(5).getCell(1).setCellValue(orders.getStarttime());
+		}
+		if (null != orders.getEndtime()) {
+			sheet.getRow(6).getCell(1).setCellValue(orders.getEndtime());
+		}
+
+		//设置经办人
+		if (null != orders.getCreater()) {
+			sheet.getRow(3).getCell(3).setCellValue(getEmpName(orders.getCreater(),empMap));
+		}
+		if (null != orders.getChecker()) {
+			sheet.getRow(4).getCell(3).setCellValue(getEmpName(orders.getChecker(),empMap));
+		}
+		if (null != orders.getStarter()) {
+			sheet.getRow(5).getCell(3).setCellValue(getEmpName(orders.getStarter(),empMap));
+		}
+		if (null != orders.getEnder()) {
+			sheet.getRow(6).getCell(3).setCellValue(getEmpName(orders.getEnder(),empMap));
+		}
+		//设置订单明细
+		int index = 0;
+		for (int i = 9; i < rowCount; i++) {
+			Orderdetail orderdetail = orderdetails.get(index);
+			sheet.getRow(i).getCell(0).setCellValue(orderdetail.getGoodsname());
+			sheet.getRow(i).getCell(1).setCellValue(orderdetail.getNum());
+			sheet.getRow(i).getCell(2).setCellValue(orderdetail.getPrice());
+			sheet.getRow(i).getCell(3).setCellValue(orderdetail.getMoney());
+			index++;
+		}
+		sheet.getRow(rowCount).getCell(0).setCellValue("合计");
+		sheet.getRow(rowCount).getCell(3).setCellValue(orders.getTotalmoney());
+		workbook.write(outputStream);
+		workbook.close();
 	}
 
 

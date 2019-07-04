@@ -11,6 +11,8 @@ public class Supplier {
 	private String tele;//联系电话
 	private String email;//邮件地址
 	private String type;//1：供应商 2：客户
+	public static final String TYPE_SUPPLIER = "1";
+	public static final String TYPE_CUSTOMER = "2";
 
 	public Long getUuid() {		
 		return uuid;

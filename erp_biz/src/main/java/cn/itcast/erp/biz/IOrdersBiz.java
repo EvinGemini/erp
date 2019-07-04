@@ -1,5 +1,8 @@
 package cn.itcast.erp.biz;
 import cn.itcast.erp.entity.Orders;
+
+import java.io.OutputStream;
+
 /**
  * 订单业务逻辑层接口
  * @author Administrator
@@ -13,5 +16,8 @@ public interface IOrdersBiz extends IBaseBiz<Orders>{
      * @param empUuid
      */
     void doStart(Long uuid, Long empUuid);
+
+    //导出订单
+    void exportById(OutputStream outputStream,Long uuid) throws Exception;
 }
 

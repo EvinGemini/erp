@@ -10,6 +10,7 @@
 <script type="text/javascript" src="ui/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="ui/jquery.serializejson.min.js"></script>
 <script type="text/javascript" src="ui/request.js"></script>
+<script type="text/javascript" src="ui/download.js"></script>
 <script type="text/javascript" src="js/crud.js"></script>
 <script type="text/javascript">
 	if(Request['type'] == 1){
@@ -81,6 +82,12 @@
 
 		</table>
 		<button id="btnSave" type="button">保存</button>
+	</form>
+</div>
+
+<div id="importDlg" style="padding: 4px">
+	<form id="importForm" enctype="multipart/form-data">
+		<input type="file" name="file">
 	</form>
 </div>
 

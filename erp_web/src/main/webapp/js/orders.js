@@ -87,26 +87,34 @@ $(function () {
         singleSelect: true
     });
 
+    var toolbar = new Array();
     //添加审核按钮
     if (Request['oper'] == 'doCheck') {
-        $('#ordersDlg').dialog({
-            toolbar: [{
-                text: '审核',
-                iconCls: 'icon-search',
-                handler: doCheck
-            }]
-        })
+        toolbar.push({
+            text: '审核',
+            iconCls: 'icon-search',
+            handler: doCheck
+        });
     }
     //添加确认按钮
     if (Request['oper'] == 'doStart') {
-        $('#ordersDlg').dialog({
-            toolbar: [{
-                text: '确认',
-                iconCls: 'icon-search',
-                handler: doStart
-            }]
-        })
+        toolbar.push({
+            text: '确认',
+            iconCls: 'icon-search',
+            handler: doStart
+        });
     }
+    //添加导出按钮
+    toolbar.push({
+        text: '导出',
+        iconCls: 'icon-excel',
+        handler: doExport
+    });
+
+    $("#ordersDlg").dialog({
+        toolbar:toolbar
+    });
+
     //添加明细表格双击事件
     if (Request['oper'] == 'doInStore' || Request['oper'] == 'doOutStore') {
         $('#itemgrid').datagrid({
@@ -353,4 +361,8 @@ function getColumns() {
             {field: 'waybillsn', title: '运单号', width: 100}
         ]];
     }
+}
+
+function doExport() {
+    $.download('orders_exportById',{id:$("#uuid").html()});
 }
