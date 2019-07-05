@@ -183,6 +183,7 @@
             <artifactId>quartz</artifactId>
             <version>2.2.3</version>
 		</dependency>
+
 <!--		excel操作框架-->
 		<!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
 		<dependency>
@@ -191,12 +192,24 @@
 			<version>3.17</version>
 		</dependency>
 
+		<!-- Web Service CXF-->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>3.1.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>3.1.10</version>
+		</dependency>
+
 	</dependencies>
   
     <build>  
 	  <plugins>
 	      <plugin>  
-	          <groupId>org.apache.maven.plugins</groupId>  
+	          <groupId>org.apache.maven.plugins</groupId>
 	          <artifactId>maven-compiler-plugin</artifactId>  
 	          <version>2.3.2</version>  
 	          <configuration>  
@@ -223,5 +236,6 @@
     	<module>erp_dao</module>
     	<module>erp_biz</module>
     	<module>erp_web</module>
+        <module>erp_client</module>
     </modules>
 </project>

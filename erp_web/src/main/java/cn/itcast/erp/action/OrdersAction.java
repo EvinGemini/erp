@@ -5,6 +5,7 @@ import cn.itcast.erp.entity.Orderdetail;
 import cn.itcast.erp.entity.Orders;
 import cn.itcast.erp.exception.ErpException;
 import com.alibaba.fastjson.JSON;
+import com.redsum.bos.ws.Waybilldetail;
 import org.apache.struts2.ServletActionContext;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +22,11 @@ public class OrdersAction extends BaseAction<Orders> {
 
 	private IOrdersBiz ordersBiz;
 	private String json;
+	private Long waybillSn;
+
+	public void setWaybillSn(Long waybillSn) {
+		this.waybillSn = waybillSn;
+	}
 
 	public void setJson(String json) {
 		this.json = json;
@@ -126,6 +132,11 @@ public class OrdersAction extends BaseAction<Orders> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void waybillDetailList() {
+		List<Waybilldetail> waybilldetails = ordersBiz.waybillDetailList(waybillSn);
+		write(JSON.toJSONString(waybilldetails));
 	}
 
 }

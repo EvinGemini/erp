@@ -9,6 +9,8 @@ import cn.itcast.erp.entity.Orders;
 import cn.itcast.erp.entity.Supplier;
 import cn.itcast.erp.exception.ErpException;
 import com.alibaba.fastjson.JSON;
+import com.redsum.bos.ws.Waybilldetail;
+import com.redsum.bos.ws.impl.IWaybillWs;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -31,7 +33,12 @@ public class OrdersBiz extends BaseBiz<Orders> implements IOrdersBiz {
 	private IOrdersDao ordersDao;
 	private IEmpDao empDao;
 	private ISupplierDao supplierDao;
-	
+	private IWaybillWs waybillWs;
+
+	public void setWaybillWs(IWaybillWs waybillWs) {
+		this.waybillWs = waybillWs;
+	}
+
 	public void setOrdersDao(IOrdersDao ordersDao) {
 		this.ordersDao = ordersDao;
 		super.setBaseDao(this.ordersDao);
@@ -272,6 +279,11 @@ public class OrdersBiz extends BaseBiz<Orders> implements IOrdersBiz {
 		sheet.getRow(rowCount).getCell(3).setCellValue(orders.getTotalmoney());
 		workbook.write(outputStream);
 		workbook.close();
+	}
+
+	@Override
+	public List<Waybilldetail> waybillDetailList(Long sn) {
+		return waybillWs.waybilldetailList(sn);
 	}
 
 

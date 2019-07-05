@@ -14,9 +14,8 @@
 		">
 	<import resource="applicationContext_biz.xml"/>
 	<import resource="applicationContext_tx.xml"/>
-	<import resource="applicationContext_mail.xml"/>
+<!--	<import resource="applicationContext_mail.xml"/>-->
 	<import resource="applicationContext_job.xml"/>
-	
 	<!-- 部门 -->
 	<bean id="depAction" class="cn.itcast.erp.action.DepAction" scope="prototype">
 		<property name="depBiz" ref="depBiz"></property>

@@ -65,6 +65,33 @@ $(function () {
             $('#checktime').html(formatDate(rowData.checktime));
             $('#starttime').html(formatDate(rowData.starttime));
             $('#endtime').html(formatDate(rowData.endtime));
+            $('#waybillsn').html(rowData.waybillsn);
+            //获取窗口属性
+            var options = $('#ordersDlg').dialog('options');
+            var toolbar = options.toolbar;
+            if (rowData.state * 1 == 1 && rowData.type * 1 == 2) {
+                toolbar.push({
+                    text:'运单详情',
+                    iconCls:'icon-search',
+                    handler:function(){
+                        $('#waybillDlg').dialog('open');
+                        //初始化表格
+                        $('#waybillGrid').datagrid({
+                            url:'orders_waybillDetailList?waybillSn=' + $('#waybillsn').html(),
+                            columns:[[
+                                {field:'exedate',title:'执行日期',width:100},
+                                {field:'exetime',title:'执行时间',width:100},
+                                {field:'info',title:'执行信息',width:100}
+                            ]],
+                            rownumbers:true
+                        });
+                    }
+                });
+                $("#ordersDlg").dialog({
+                    toolbar:toolbar
+                });
+            }
+
             //打开窗口
             $('#ordersDlg').dialog('open');
             //加载明细表格
