@@ -43,18 +43,18 @@
 				<td width="15%" id="ender"></td>
 			</tr>
 			<tr>
-				<td>下单日期</td>
+				<td class="bg">下单日期</td>
 				<td id="createtime"></td>
-				<td >审核日期</td>
+				<td class="bg">审核日期</td>
 				<td id="checktime"></td>
-				<td >采购日期</td>
+				<td class="bg">采购日期</td>
 				<td id="starttime"></td>
-				<td >入库日期</td>
+				<td class="bg">入库日期</td>
 				<td id="endtime"></td>
 			</tr>
 			<tr>
 				<td class="bg noBorderBottom">运单号</td>
-				<td class="noBorderBottom" id="waybillSn"></td>
+				<td class="noBorderBottom" id="waybillsn"></td>
 				<td class="bg noBorderBottom"></td>
 				<td class="noBorderBottom"></td>
 				<td class="bg noBorderBottom"></td>
@@ -99,6 +99,10 @@
 	</form>
 	<div style="height: 5px"></div>
 	<table id="ordersgrid"></table>
+</div>
+<div id="waybillDlg" class="easyui-dialog" data-options="title:'运单详情',modal:true,closed:true
+,width:500,height:300">
+	<table id="waybillGrid"></table>
 </div>
 
 </body>

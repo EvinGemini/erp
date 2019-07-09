@@ -23,6 +23,7 @@
 	<!-- 员工 -->
 	<bean id="empBiz" class="cn.itcast.erp.biz.impl.EmpBiz">
 		<property name="empDao" ref="empDao"></property>
+		<property name="roleDao" ref="roleDao"></property>
 	</bean>
 	<!-- 商品 -->
 	<bean id="goodsBiz" class="cn.itcast.erp.biz.impl.GoodsBiz">
@@ -66,6 +67,7 @@
 	<!-- 角色 -->
 	<bean id="roleBiz" class="cn.itcast.erp.biz.impl.RoleBiz">
 		<property name="roleDao" ref="roleDao"></property>
+		<property name="menuDao" ref="menuDao"></property>
 	</bean>
 	<!-- 仓库 -->
 	<bean id="storeBiz" class="cn.itcast.erp.biz.impl.StoreBiz">

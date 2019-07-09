@@ -29,11 +29,12 @@ $(function(){
 	showName();
 	//获取菜单数据
 	$.ajax({
-		url: 'menu_getMenuTree',
+		url: 'menu_readMenusByEmpuuid',
 		type: 'post',
 		dataType: 'json',
 		success: function(rtn){
 			//给菜单赋值
+			_menus=rtn;
 			_menus=rtn;
 			InitLeftMenu();
 		}

@@ -16,6 +16,7 @@
 	<import resource="applicationContext_tx.xml"/>
 <!--	<import resource="applicationContext_mail.xml"/>-->
 	<import resource="applicationContext_job.xml"/>
+	<import resource="applicationContext_shiro.xml"/>
 	<!-- 部门 -->
 	<bean id="depAction" class="cn.itcast.erp.action.DepAction" scope="prototype">
 		<property name="depBiz" ref="depBiz"></property>
@@ -80,7 +81,6 @@
 
 	<!-- 登陆/退出 -->
 	<bean id="loginAction" class="cn.itcast.erp.action.LoginAction" scope="prototype">
-		<property name="empBiz" ref="empBiz"></property>
 	</bean>
 <!--	销售报表-->
 	<bean id="reportAction" class="cn.itcast.erp.action.ReportAction" scope="prototype">
